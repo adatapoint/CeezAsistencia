@@ -21,4 +21,8 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
   def index() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.index())
   }
+
+  def suma(num1: Int, num2: Int) = Action { implicit request =>
+    Ok(s"${num1+num2*3}")
+  }
 }
