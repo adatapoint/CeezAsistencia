@@ -5,7 +5,7 @@ import slick.jdbc.SQLiteProfile.api._
 case class GeneroRow(id: Long, descripcion: String)
 
 trait GeneroComponent{
-  // Definition of the SUPPLIERS table
+  // Definition of the GENERO table
   class GeneroTable(tag: Tag) extends Table[GeneroRow](tag, "GENERO") {
     def id = column[Long]("ID", O.PrimaryKey, O.AutoInc) // This is the primary key column
     def descripcion = column[String]("DESCRIPCION")
