@@ -16,7 +16,11 @@ trait MunicipioComponent{
     def nombre  = column[String]("NOMBRE")
     def departamentoID = column[Long]("DEPARTAMENTO_ID")
     // Every table needs a * projection with the same type as the table's type parameter
-    def * = (id, nombre, departamentoID)<>(MunicipioRow.tupled, MunicipioRow.unapply _)
+    def * = (
+      id,
+      nombre,
+      departamentoID
+    )<>(MunicipioRow.tupled, MunicipioRow.unapply)
     // Tiene FK
     def departamento = foreignKey("DEPARTAMENTO_FK", departamentoID, departamentos)(_.id)
   }

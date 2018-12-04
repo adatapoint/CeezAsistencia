@@ -5,15 +5,16 @@ import java.sql.Timestamp
 import slick.jdbc.SQLiteProfile.api._
 
 case class EntidadRow(
-                     id: Long,
-                     nombre: String,
-                     sigla: String,
-                     telefono: String,
-                     correo: String,
-                     web: String,
-                     direccion: String,
-                     usuarioID: Long,
-                   )
+                      id: Long,
+                      nombre: String,
+                      sigla: String,
+                      telefono: String,
+                      correo: String,
+                      web: String,
+                      direccion: String,
+                      usuarioID: Long
+                     )
+
 
 trait EntidadComponent{
   self: EntidadComponent with UsuarioComponent =>
@@ -28,8 +29,17 @@ trait EntidadComponent{
     def direccion = column[String] ("DIRECCION")
     def usuarioID = column[Long]("USUARIO_ID")
     // Every table needs a * projection with the same type as the table's type parameter
-    def * = (id, nombre, sigla, telefono, correo, web, direccion, usuarioID)<>(EntidadRow.tupled, EntidadRow.unapply _)
-    // Tiene FK
+    def * = (
+      id,
+      nombre,
+      sigla,
+      telefono,
+      correo,
+      web,
+      direccion,
+      usuarioID
+    )<>(EntidadRow.tupled, EntidadRow.unapply)
+    // Tiene FK dado que las entidades tienen un contacto.
     def usuario = foreignKey("USUARIO_FK", usuarioID, usuarios)(_.id)
   }
   val entidades = TableQuery[EntidadTable]

@@ -3,9 +3,9 @@ package model.dominio
 import slick.jdbc.SQLiteProfile.api._
 
 case class BarrioRow(
-                    id: Long,
-                    nombre: String,
-                    municipioID: Long
+                      id: Long,
+                      nombre: String,
+                      municipioID: Long
                     )
 
 trait BarrioComponent{
@@ -16,7 +16,11 @@ trait BarrioComponent{
     def nombre  = column[String]("NOMBRE")
     def municipioID = column[Long]("MUNICIPIO_ID")
     // Every table needs a * projection with the same type as the table's type parameter
-    def * = (id, nombre, municipioID)<>(BarrioRow.tupled, BarrioRow.unapply _)
+    def * = (
+      id,
+      nombre,
+      municipioID
+    )<>(BarrioRow.tupled, BarrioRow.unapply)
     // Tiene FK
     def municipio = foreignKey("MUNICIPIO_FK", municipioID, municipios)(_.id)
   }

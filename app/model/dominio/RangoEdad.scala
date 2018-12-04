@@ -2,7 +2,12 @@ package model.dominio
 
 import slick.jdbc.SQLiteProfile.api._
 
-case class RangoEdadRow(id: Long, descripcion: String, edadInicio: Int, edadFin: Int)
+case class RangoEdadRow(
+                         id: Long,
+                         descripcion: String,
+                         edadInicio: Int,
+                         edadFin: Int
+                       )
 
 trait RangoEdadComponent{
   // Definition of the RANGOEDAD table
@@ -12,7 +17,12 @@ trait RangoEdadComponent{
     def edadInicio = column[Int]("EDAD_INICIO")
     def edadFin = column[Int]("EDAD_FIN")
     // Every table needs a * projection with the same type as the table's type parameter
-    def * = (id, nombre, edadInicio, edadFin)<>(RangoEdadRow.tupled, RangoEdadRow.unapply _)
+    def * = (
+      id,
+      nombre,
+      edadInicio,
+      edadFin
+    )<>(RangoEdadRow.tupled, RangoEdadRow.unapply)
   }
   val rangosEdad = TableQuery[RangoEdadTable]
 }

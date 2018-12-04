@@ -18,7 +18,7 @@ case class UsuarioRow(
                      rangoEdadID: Long,
                      ocupacionID: Long,
                      barrioID: Long,
-                     municipio: Long
+                     municipioID: Long
                    )
 
 trait UsuarioComponent{
@@ -40,7 +40,7 @@ trait UsuarioComponent{
     def fechaRegistro = column[Timestamp]("FECHA_REGISTRO")
     def generoID = column[Long]("GENERO_ID")
     def rangoEdadID = column[Long]("RANGO_EDAD_ID")
-    def ocupacionID = column[Long]("ocupacion_ID")
+    def ocupacionID = column[Long]("OCUPACION_ID")
     def barrioID = column[Long]("BARRIO_ID")
     def municipioID = column[Long]("MUNICIPIO_ID")
     // Every table needs a * projection with the same type as the table's type parameter
@@ -58,7 +58,7 @@ trait UsuarioComponent{
       ocupacionID,
       barrioID,
       municipioID
-    )<>(UsuarioRow.tupled, UsuarioRow.unapply _)
+    )<>(UsuarioRow.tupled, UsuarioRow.unapply)
     // Tiene FK
     def genero = foreignKey("GENERO_FK", generoID, generos)(_.id)
     def rangoEdad = foreignKey("RANGO_EDAD_FK", rangoEdadID, rangosEdad)(_.id)

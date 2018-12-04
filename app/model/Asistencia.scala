@@ -14,7 +14,8 @@ trait AsistenciaComponent{
     def usuarioID  = column[Long]("USUARIO_ID")
     def sesionID = column[Long]("SESION_ID")
     // Every table needs a * projection with the same type as the table's type parameter
-    def * = (usuarioID, sesionID)<>(AsistenciaRow.tupled, AsistenciaRow.unapply _)
+    def * = (usuarioID, sesionID)<>(AsistenciaRow.tupled, AsistenciaRow.unapply)
+    def pk = primaryKey("PK_ASISTENCIA", (usuarioID, sesionID))
     // Tiene FK
     def usuario = foreignKey("USUARIO_FK", usuarioID, usuarios)(_.id)
     def sesion = foreignKey("SESION_FK", sesionID, sesiones)(_.id)

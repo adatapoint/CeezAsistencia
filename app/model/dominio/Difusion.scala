@@ -2,7 +2,10 @@ package model.dominio
 
 import slick.jdbc.SQLiteProfile.api._
 
-case class DifusionRow(id: Long, descripcion: String)
+case class DifusionRow(
+                        id: Long,
+                        descripcion: String
+                      )
 
 trait DifusionComponent{
   // Definition of the DIFUSION table
@@ -10,7 +13,10 @@ trait DifusionComponent{
     def id = column[Long] ("ID", O.PrimaryKey, O.AutoInc)
     def descripcion  = column[String]("DESCRIPCION")
     // Every table needs a * projection with the same type as the table's type parameter
-    def * = (id, descripcion)<>(DifusionRow.tupled, DifusionRow.unapply _)
+    def * = (
+      id,
+      descripcion
+    )<>(DifusionRow.tupled, DifusionRow.unapply)
   }
   val difusiones = TableQuery[DifusionTable]
 }

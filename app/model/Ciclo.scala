@@ -22,7 +22,13 @@ trait CicloComponent{
     def descripcion = column[String]("DESCRIPCION")
     def proyectoID = column[Long]("PROYECTO_ID")
     // Every table needs a * projection with the same type as the table's type parameter
-    def * = (id, fechaInicio, fechaFin, descripcion, proyectoID)<>(CicloRow.tupled, CicloRow.unapply _)
+    def * = (
+      id,
+      fechaInicio,
+      fechaFin,
+      descripcion,
+      proyectoID
+    )<>(CicloRow.tupled, CicloRow.unapply)
     // Tiene FK
     def proyecto = foreignKey("PROYECTO_FK", proyectoID, proyectos)(_.id)
   }
