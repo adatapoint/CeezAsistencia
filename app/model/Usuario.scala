@@ -2,8 +2,14 @@ package model
 
 import java.sql.Timestamp
 
+import javax.inject.Inject
 import model.dominio._
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
+import play.db.NamedDatabase
+import slick.jdbc.JdbcProfile
 import slick.jdbc.SQLiteProfile.api._
+
+import scala.concurrent.{ExecutionContext, Future}
 
 case class UsuarioRow(
                      id: Long,
@@ -28,7 +34,7 @@ trait UsuarioComponent{
     with BarrioComponent
     with MunicipioComponent =>
   // Definition of the USUARIO table
-  class UsuarioTable(tag: Tag) extends Table[UsuarioRow] (tag, "USUARIO") {
+  protected class UsuarioTable(tag: Tag) extends Table[UsuarioRow] (tag, "USUARIO") {
     def id = column[Long] ("ID", O.PrimaryKey, O.AutoInc)
     def nombre1 = column[String]("NOMBRE1")
     def nombre2 = column[String]("NOMBRE2")
@@ -65,5 +71,24 @@ trait UsuarioComponent{
     def barrio = foreignKey("BARRIO_FK", barrioId, barrios)(_.id)
     def municipio = foreignKey("MUNICIPIO_FK", municipioId, municipios)(_.id)
   }
-  val usuarios = TableQuery[UsuarioTable]
+  lazy val usuarios = TableQuery[UsuarioTable]
+}
+
+class UsuarioDao @Inject() (protected val dbConfigProvider: DatabaseConfigProvider) (
+  implicit ec: ExecutionContext) extends HasDatabaseConfigProvider[JdbcProfile] with MegaTrait {
+
+  def getUsuarioById(id: Long): Future[Option[UsuarioRow]] = {
+    val q = usuarios.filter(_.id === id)  // usuario => usuario.id === id
+//    val r: Future[Option[UsuarioRow]] = db.run(q.result.headOption) // Retorna un futuro algo (puede ser nulo, entonces ponemos Option) Y como queremos el primero, ponemos head, pero como posible que sea nul, ponemos headOption
+    db.run(q.result.headOption)
+  }
+
+  def getUsuariosBySesion(sesionId: Long): Future[Seq[UsuarioRow]] = { // Aquí está implicada la tabla Usuarios, la tabla Asistencia y la tabla Sesión
+    val q = for {
+      u <- usuarios
+      a <- asistencias
+      if a.sesionId === sesionId && u.id === a.usuarioId
+    } yield u
+    db.run(q.result)
+  }
 }

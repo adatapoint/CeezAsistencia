@@ -21,7 +21,7 @@ trait ProyectoComponent{
     def fechaInicio = column[Timestamp]("FECHA_INCIO")
     def fechaFin = column[Timestamp]("FECHA_FIN")
     def descripcion = column[String]("DESCRIPCION")
-    def estadoProyectoId = column[Long]("PROYECTO_ID")
+    def estadoProyectoId = column[Long]("ESTADO_PROYECTO_ID")
     // Every table needs a * projection with the same type as the table's type parameter
     def * = (
       id,
@@ -33,5 +33,5 @@ trait ProyectoComponent{
     // Tiene FK
     def estadoProyecto = foreignKey("ESTADO_PROYECTO_FK", estadoProyectoId, estadosProyecto)(_.id)
   }
-  val proyectos = TableQuery[ProyectoTable]
+  lazy val proyectos = TableQuery[ProyectoTable]
 }

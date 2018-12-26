@@ -24,5 +24,5 @@ trait MunicipioComponent{
     // Tiene FK
     def departamento = foreignKey("DEPARTAMENTO_FK", departamentoId, departamentos)(_.id)
   }
-  val municipios = TableQuery[MunicipioTable]
+  lazy val municipios = TableQuery[MunicipioTable]
 }

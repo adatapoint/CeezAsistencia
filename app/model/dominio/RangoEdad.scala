@@ -24,5 +24,5 @@ trait RangoEdadComponent{
       edadFin
     )<>(RangoEdadRow.tupled, RangoEdadRow.unapply)
   }
-  val rangosEdad = TableQuery[RangoEdadTable]
+  lazy val rangosEdad = TableQuery[RangoEdadTable]
 }

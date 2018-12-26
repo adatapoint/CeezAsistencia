@@ -18,5 +18,5 @@ trait DepartamentoComponent{
       nombre
     )<>(DepartamentoRow.tupled, DepartamentoRow.unapply)
   }
-  val departamentos = TableQuery[DepartamentoTable]
+  lazy val departamentos = TableQuery[DepartamentoTable]
 }

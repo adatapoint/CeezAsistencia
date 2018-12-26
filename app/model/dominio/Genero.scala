@@ -18,7 +18,7 @@ trait GeneroComponent{
       descripcion
     )<>(GeneroRow.tupled, GeneroRow.unapply)
   }
-  val generos = TableQuery[GeneroTable]
+  lazy val generos = TableQuery[GeneroTable]
 }
 
 //http://slick.lightbend.com/doc/3.2.3/gettingstarted.html#schema

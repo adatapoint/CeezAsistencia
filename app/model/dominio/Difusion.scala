@@ -18,5 +18,5 @@ trait DifusionComponent{
       descripcion
     )<>(DifusionRow.tupled, DifusionRow.unapply)
   }
-  val difusiones = TableQuery[DifusionTable]
+  lazy val difusiones = TableQuery[DifusionTable]
 }

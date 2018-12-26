@@ -18,5 +18,5 @@ trait OcupacionComponent{
       nombre
     )<>(OcupacionRow.tupled, OcupacionRow.unapply)
   }
-  val ocupaciones = TableQuery[OcupacionTable]
+  lazy val ocupaciones = TableQuery[OcupacionTable]
 }

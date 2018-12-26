@@ -29,5 +29,5 @@ trait AlianzaComponent{
     def entidad = foreignKey("ENTIDAD_FK", entidadId, entidades)(_.id)
     def proyecto = foreignKey("PROYECTO_FK", proyectoId, proyectos)(_.id)
   }
-  val alianzas = TableQuery[AlianzaTable]
+  lazy val alianzas = TableQuery[AlianzaTable]
 }

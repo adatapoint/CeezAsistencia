@@ -42,5 +42,5 @@ trait EntidadComponent{
     // Tiene FK dado que las entidades tienen un contacto.
     def usuario = foreignKey("USUARIO_FK", usuarioId, usuarios)(_.id)
   }
-  val entidades = TableQuery[EntidadTable]
+  lazy val entidades = TableQuery[EntidadTable]
 }

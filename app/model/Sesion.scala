@@ -35,5 +35,5 @@ trait SesionComponent{
     // Tiene FK
     def ciclo = foreignKey("CICLO_FK", cicloId, ciclos)(_.id)
   }
-  val sesiones = TableQuery[SesionTable]
+  lazy val sesiones = TableQuery[SesionTable]
 }

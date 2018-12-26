@@ -18,7 +18,7 @@ trait EstadoProyectoComponent{
       descripcion
     )<>(EstadoProyectoRow.tupled, EstadoProyectoRow.unapply)
   }
-  val estadosProyecto = TableQuery[EstadoProyectoTable]
+  lazy val estadosProyecto = TableQuery[EstadoProyectoTable]
 }
 
 //http://slick.lightbend.com/doc/3.2.3/gettingstarted.html#schema
