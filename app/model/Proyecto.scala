@@ -10,28 +10,28 @@ case class ProyectoRow(
                         fechaInicio: Timestamp,
                         fechaFin: Timestamp,
                         descripcion: String,
-                        estadoProyectoID: Long
+                        estadoProyectoId: Long
                       )
 
 trait ProyectoComponent{
-  self: ProyectoComponent with EstadoProyectoComponent =>
+  self: EstadoProyectoComponent =>
   // Definition of the PROYECTO table
   class ProyectoTable(tag: Tag) extends Table[ProyectoRow] (tag, "PROYECTO") {
     def id = column[Long] ("ID", O.PrimaryKey, O.AutoInc)
     def fechaInicio = column[Timestamp]("FECHA_INCIO")
     def fechaFin = column[Timestamp]("FECHA_FIN")
     def descripcion = column[String]("DESCRIPCION")
-    def estadoProyectoID = column[Long]("PROYECTO_ID")
+    def estadoProyectoId = column[Long]("PROYECTO_ID")
     // Every table needs a * projection with the same type as the table's type parameter
     def * = (
       id,
       fechaInicio,
       fechaFin,
       descripcion,
-      estadoProyectoID
+      estadoProyectoId
     )<>(ProyectoRow.tupled, ProyectoRow.unapply)
     // Tiene FK
-    def estadoProyecto = foreignKey("ESTADO_PROYECTO_FK", estadoProyectoID, estadosProyecto)(_.id)
+    def estadoProyecto = foreignKey("ESTADO_PROYECTO_FK", estadoProyectoId, estadosProyecto)(_.id)
   }
   val proyectos = TableQuery[ProyectoTable]
 }

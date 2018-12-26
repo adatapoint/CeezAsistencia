@@ -9,28 +9,28 @@ case class CicloRow(
                    fechaInicio: Timestamp,
                    fechaFin: Timestamp,
                    descripcion: String,
-                   proyectoID: Long
+                   proyectoId: Long
                    )
 
 trait CicloComponent{
-  self: CicloComponent with ProyectoComponent =>
+  self: ProyectoComponent =>
   // Definition of the CICLO table
   class CicloTable(tag: Tag) extends Table[CicloRow] (tag, "CICLO") {
     def id = column[Long] ("ID", O.PrimaryKey, O.AutoInc)
     def fechaInicio = column[Timestamp]("FECHA_INCIO")
     def fechaFin = column[Timestamp]("FECHA_FIN")
     def descripcion = column[String]("DESCRIPCION")
-    def proyectoID = column[Long]("PROYECTO_ID")
+    def proyectoId = column[Long]("PROYECTO_ID")
     // Every table needs a * projection with the same type as the table's type parameter
     def * = (
       id,
       fechaInicio,
       fechaFin,
       descripcion,
-      proyectoID
+      proyectoId
     )<>(CicloRow.tupled, CicloRow.unapply)
     // Tiene FK
-    def proyecto = foreignKey("PROYECTO_FK", proyectoID, proyectos)(_.id)
+    def proyecto = foreignKey("PROYECTO_FK", proyectoId, proyectos)(_.id)
   }
   val ciclos = TableQuery[CicloTable]
 }

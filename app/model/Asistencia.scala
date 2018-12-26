@@ -3,22 +3,22 @@ package model
 import slick.jdbc.SQLiteProfile.api._
 
 case class AsistenciaRow(
-                       usuarioID: Long,
-                       sesionID: Long
+                       usuarioId: Long,
+                       sesionId: Long
                      )
 
 trait AsistenciaComponent{
-  self: AsistenciaComponent with UsuarioComponent with SesionComponent =>
+  self: UsuarioComponent with SesionComponent =>
   // Definition of the ASISTENCIA table
   class AsistenciaTable(tag: Tag) extends Table[AsistenciaRow] (tag, "ASISTENCIA") {
-    def usuarioID  = column[Long]("USUARIO_ID")
-    def sesionID = column[Long]("SESION_ID")
+    def usuarioId  = column[Long]("USUARIO_ID")
+    def sesionId = column[Long]("SESION_ID")
     // Every table needs a * projection with the same type as the table's type parameter
-    def * = (usuarioID, sesionID)<>(AsistenciaRow.tupled, AsistenciaRow.unapply)
-    def pk = primaryKey("PK_ASISTENCIA", (usuarioID, sesionID))
+    def * = (usuarioId, sesionId)<>(AsistenciaRow.tupled, AsistenciaRow.unapply)
+    def pk = primaryKey("PK_ASISTENCIA", (usuarioId, sesionId))
     // Tiene FK
-    def usuario = foreignKey("USUARIO_FK", usuarioID, usuarios)(_.id)
-    def sesion = foreignKey("SESION_FK", sesionID, sesiones)(_.id)
+    def usuario = foreignKey("USUARIO_FK", usuarioId, usuarios)(_.id)
+    def sesion = foreignKey("SESION_FK", sesionId, sesiones)(_.id)
   }
   val asistencias = TableQuery[AsistenciaTable]
 }

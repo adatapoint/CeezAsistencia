@@ -14,16 +14,15 @@ case class UsuarioRow(
                      celular: String,
                      correo: String,
                      fechaRegistro: Timestamp,
-                     generoID: Long,
-                     rangoEdadID: Long,
-                     ocupacionID: Long,
-                     barrioID: Long,
-                     municipioID: Long
+                     generoId: Long,
+                     rangoEdadId: Long,
+                     ocupacionId: Long,
+                     barrioId: Long,
+                     municipioId: Long
                    )
 
 trait UsuarioComponent{
-  self: UsuarioComponent
-    with GeneroComponent
+    self: GeneroComponent
     with RangoEdadComponent
     with OcupacionComponent
     with BarrioComponent
@@ -38,11 +37,11 @@ trait UsuarioComponent{
     def celular = column[String]("CELULAR")
     def correo = column[String]("CORREO")
     def fechaRegistro = column[Timestamp]("FECHA_REGISTRO")
-    def generoID = column[Long]("GENERO_ID")
-    def rangoEdadID = column[Long]("RANGO_EDAD_ID")
-    def ocupacionID = column[Long]("OCUPACION_ID")
-    def barrioID = column[Long]("BARRIO_ID")
-    def municipioID = column[Long]("MUNICIPIO_ID")
+    def generoId = column[Long]("GENERO_ID")
+    def rangoEdadId = column[Long]("RANGO_EDAD_ID")
+    def ocupacionId = column[Long]("OCUPACION_ID")
+    def barrioId = column[Long]("BARRIO_ID")
+    def municipioId = column[Long]("MUNICIPIO_ID")
     // Every table needs a * projection with the same type as the table's type parameter
     def * = (
       id,
@@ -53,18 +52,18 @@ trait UsuarioComponent{
       celular,
       correo,
       fechaRegistro,
-      generoID,
-      rangoEdadID,
-      ocupacionID,
-      barrioID,
-      municipioID
+      generoId,
+      rangoEdadId,
+      ocupacionId,
+      barrioId,
+      municipioId
     )<>(UsuarioRow.tupled, UsuarioRow.unapply)
     // Tiene FK
-    def genero = foreignKey("GENERO_FK", generoID, generos)(_.id)
-    def rangoEdad = foreignKey("RANGO_EDAD_FK", rangoEdadID, rangosEdad)(_.id)
-    def ocupacion = foreignKey("OCUPACION_FK", ocupacionID, ocupaciones)(_.id)
-    def barrio = foreignKey("BARRIO_FK", barrioID, barrios)(_.id)
-    def municipio = foreignKey("MUNICIPIO_FK", municipioID, municipios)(_.id)
+    def genero = foreignKey("GENERO_FK", generoId, generos)(_.id)
+    def rangoEdad = foreignKey("RANGO_EDAD_FK", rangoEdadId, rangosEdad)(_.id)
+    def ocupacion = foreignKey("OCUPACION_FK", ocupacionId, ocupaciones)(_.id)
+    def barrio = foreignKey("BARRIO_FK", barrioId, barrios)(_.id)
+    def municipio = foreignKey("MUNICIPIO_FK", municipioId, municipios)(_.id)
   }
   val usuarios = TableQuery[UsuarioTable]
 }

@@ -10,11 +10,11 @@ case class SesionRow(
                     fecha: Timestamp,
                     lugar: String,
                     observacion: String,
-                    cicloID: Long
+                    cicloId: Long
                     )
 
 trait SesionComponent{
-  self: SesionComponent with CicloComponent =>
+  self: CicloComponent =>
   // Definition of the SESION table
   class SesionTable(tag: Tag) extends Table[SesionRow] (tag, "SESION") {
     def id = column[Long] ("ID", O.PrimaryKey, O.AutoInc)
@@ -22,7 +22,7 @@ trait SesionComponent{
     def fecha = column[Timestamp]("FECHA")
     def lugar = column[String]("LUGAR")
     def observacion = column[String]("OBSERVACION")
-    def cicloID = column[Long]("CICLO_ID")
+    def cicloId = column[Long]("CICLO_ID")
     // Every table needs a * projection with the same type as the table's type parameter
     def * = (
       id,
@@ -30,10 +30,10 @@ trait SesionComponent{
       fecha,
       lugar,
       observacion,
-      cicloID
+      cicloId
     )<>(SesionRow.tupled, SesionRow.unapply)
     // Tiene FK
-    def ciclo = foreignKey("CICLO_FK", cicloID, ciclos)(_.id)
+    def ciclo = foreignKey("CICLO_FK", cicloId, ciclos)(_.id)
   }
   val sesiones = TableQuery[SesionTable]
 }
