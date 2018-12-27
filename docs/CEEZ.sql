@@ -4,7 +4,7 @@ USE scaceez_db;
 
 CREATE TABLE Departamento(
 DEP_Codigo INT(4) PRIMARY KEY, 
-DEP_Nombre VARCHAR(20) UNIQUE NOT NULL
+DEP_Nombre VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE Municipio(
@@ -31,10 +31,10 @@ GEN_Codigo INT(1) PRIMARY KEY,
 GEN_Descripcion VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE Edad(
+CREATE TABLE Rango_Edad(
 EDA_Codigo INT(1) PRIMARY KEY, 
 EDA_Descripcion VARCHAR(20) NOT NULL,
-EDA_EdadInicio INT(3) NOT NULL,
+EDA_EdadInicio INT(3),
 EDA_EdadFin INT(3)
 );
 
@@ -52,7 +52,7 @@ USR_OCU_Codigo INT(4),
 USR_BAR_Codigo INT(4),
 USR_MUN_Codigo INT(4),
 USR_FechaIngreso DATE NOT NULL,	
-FOREIGN KEY (USR_EDA_Codigo) REFERENCES Edad(EDA_Codigo),
+FOREIGN KEY (USR_EDA_Codigo) REFERENCES Rango_Edad(EDA_Codigo),
 FOREIGN KEY (USR_GEN_Codigo) REFERENCES Genero(GEN_Codigo),
 FOREIGN KEY (USR_OCU_Codigo) REFERENCES Ocupacion(OCU_Codigo),
 FOREIGN KEY (USR_MUN_Codigo) REFERENCES Municipio(MUN_Codigo),
@@ -126,9 +126,14 @@ FOREIGN KEY (ASI_USR_Codigo) REFERENCES Usuario(USR_Codigo),
 FOREIGN KEY (ASI_SES_Codigo) REFERENCES Sesion(SES_Codigo)
 );
 
-CREATE TABLE TipoSesion(
+CREATE TABLE Tipo_Sesion(
 TSES_Codigo INT(15) PRIMARY KEY AUTO_INCREMENT,
 TSES_Descripcion VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Difusion(
+DIF_Codigo INT(1) PRIMARY KEY,
+DIF_Descripcion VARCHAR(20) NOT NULL
 );
 
 INSERT INTO Departamento VALUES (00, 'Desconocido');
@@ -554,12 +559,31 @@ INSERT INTO Genero VALUES (0,'Otro');
 INSERT INTO Genero VALUES (1,'Hombre');
 INSERT INTO Genero VALUES (2,'Mujer');
 
-INSERT INTO Edad VALUES (1,'Entre 0 y 6 años', 0, 6);
-INSERT INTO Edad VALUES (2,'Entre 7 y 13 años', 7, 13);
-INSERT INTO Edad VALUES (3,'Entre 14 y 18 años', 14, 18);
-INSERT INTO Edad VALUES (4,'Entre 19 y 29 años', 19, 29);
-INSERT INTO Edad VALUES (5,'Entre 30 y 59 años', 30, 59);
-INSERT INTO Edad VALUES (6,'Mayor a 60 años', 60, NULL);
+INSERT INTO Rango_Edad VALUES (1,'Entre 0 y 6 años', 0, 6);
+INSERT INTO Rango_Edad VALUES (2,'Entre 7 y 13 años', 7, 13);
+INSERT INTO Rango_Edad VALUES (3,'Entre 14 y 18 años', 14, 18);
+INSERT INTO Rango_Edad VALUES (4,'Entre 19 y 29 años', 19, 29);
+INSERT INTO Rango_Edad VALUES (5,'Entre 30 y 59 años', 30, 59);
+INSERT INTO Rango_Edad VALUES (6,'Mayor a 60 años', 60, NULL);
+
+INSERT INTO Tipo_Sesion VALUES (1, 'Taller');
+INSERT INTO Tipo_Sesion VALUES (2, 'Seminario');
+INSERT INTO Tipo_Sesion VALUES (3, 'Grupo de Estudio');
+INSERT INTO Tipo_Sesion VALUES (4, 'Conferencia');
+INSERT INTO Tipo_Sesion VALUES (5, 'Tertulia');
+INSERT INTO Tipo_Sesion VALUES (6, 'Conversatorio');
+INSERT INTO Tipo_Sesion VALUES (7, 'Lectura');
+INSERT INTO Tipo_Sesion VALUES (8, 'Proyección / Película');
+
+INSERT INTO Difusion VALUES (1,'Redes sociales');
+INSERT INTO Difusion VALUES (2,'Voz a voz');
+INSERT INTO Difusion VALUES (3,'Sitio Web');
+INSERT INTO Difusion VALUES (4,'Afiche');
+INSERT INTO Difusion VALUES (5,'Correo electrónico');
+INSERT INTO Difusion VALUES (6,'Prensa');
+INSERT INTO Difusion VALUES (7,'Emisora');
+INSERT INTO Difusion VALUES (8,'Otro');
+
 
 INSERT INTO Usuario VALUES (1128439028,'Vincent','David','Restrepo', NULL,'3044000747','vincentrestrepo@gmail.com', '1', 4, 1, NULL,266,'2016-01-02');
 INSERT INTO Usuario VALUES (70059550,'Carlos','Mario','Gonz�lez', 'Restrepo','3004949632','carlosmgonzal@gmail.com', '1', 2, 2, 94,NULL,'2016-05-23');

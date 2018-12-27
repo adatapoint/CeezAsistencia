@@ -1,7 +1,9 @@
 package controllers
 
+import java.util.Calendar
+
 import javax.inject._
-import model.{MegaTrait, UsuarioDao}
+import model.{MegaTrait, UsuarioDao, UsuarioRow}
 import play.api._
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.mvc._
@@ -54,6 +56,15 @@ class Application @Inject()(
     } else {
 //      Future(BadRequest) // Tengo que devolver un futuro
       Future.successful(BadRequest)
+    }
+  }
+
+  def insert: Action[AnyContent] = Action.async { implicit request =>
+    if (environment.mode == play.api.Mode.Dev) {
+      val q = Seq (
+        UsuarioRow(1128439028, "Vincent", "David", "Restrepo", "Tangarife", 3137604407, "vincentrestrepo@gmail.com", Calendar.getInstance(), 1, 4, 21, 2, )
+      )
+      db.run(MegaTrait.insert)
     }
   }
 

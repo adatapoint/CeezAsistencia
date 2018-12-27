@@ -22,7 +22,7 @@ case class UsuarioRow(
     generoId: Long,
     rangoEdadId: Option[Long],
     ocupacionId: Option[Long],
-    barrioId: Long,
+    barrioId: Option[Long],
     municipioId: Long
 )
 
@@ -35,7 +35,7 @@ trait UsuarioComponent {
   // Definition of the USUARIO table
   protected class UsuarioTable(tag: Tag)
       extends Table[UsuarioRow](tag, "USUARIO") {
-    def id = column[Long]("ID", O.PrimaryKey)
+    def id = column[Long]("ID", O.PrimaryKey) //Cedula de la persona
     def nombre1 = column[String]("NOMBRE1")
     def nombre2 = column[Option[String]]("NOMBRE2")
     def apellido1 = column[String]("APELLIDO1")
@@ -46,7 +46,7 @@ trait UsuarioComponent {
     def generoId = column[Long]("GENERO_ID")
     def rangoEdadId = column[Option[Long]]("RANGO_EDAD_ID")
     def ocupacionId = column[Option[Long]]("OCUPACION_ID")
-    def barrioId = column[Long]("BARRIO_ID")
+    def barrioId = column[Option[Long]]("BARRIO_ID")
     def municipioId = column[Long]("MUNICIPIO_ID")
     // Every table needs a * projection with the same type as the table's type parameter
     def * =
@@ -71,6 +71,9 @@ trait UsuarioComponent {
     def ocupacion = foreignKey("OCUPACION_FK", ocupacionId, ocupaciones)(_.id)
     def barrio = foreignKey("BARRIO_FK", barrioId, barrios)(_.id)
     def municipio = foreignKey("MUNICIPIO_FK", municipioId, municipios)(_.id)
+
+    def correoIndex = index("CORREO_IDX", correo, unique = true) // Index para que el correo sea único.
+
   }
   lazy val usuarios = TableQuery[UsuarioTable]
 }
@@ -95,4 +98,7 @@ class UsuarioDao @Inject()(
     } yield u
     db.run(q.result)
   }
+
+
 }
+

@@ -11,7 +11,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class AlianzaRow(
     id: Option[Long],
-    fechaInicio: Timestamp,
+    fechaInicio: Option[Timestamp],
     fechaFin: Option[Timestamp],
     descripcion: Option[String],
     entidadId: Long,
@@ -23,7 +23,7 @@ trait AlianzaComponent {
   // Definition of the ALIANZA table
   class AlianzaTable(tag: Tag) extends Table[AlianzaRow](tag, "ALIANZA") {
     def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
-    def fechaInicio = column[Timestamp]("FECHA_INCIO")
+    def fechaInicio = column[Option[Timestamp]]("FECHA_INCIO")
     def fechaFin = column[Option[Timestamp]]("FECHA_FIN") // Aquí ya se tiene que es opcional pero para la base de datos.
     def descripcion = column[String]("DESCRIPCION")
     def entidadId = column[Long]("ENTIDAD_ID")

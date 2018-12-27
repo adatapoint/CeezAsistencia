@@ -11,7 +11,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class CicloRow(
     id: Option[Long],
-    fechaInicio: Timestamp,
+    fechaInicio: Option[Timestamp],
     fechaFin: Option[Timestamp],
     descripcion: String,
     proyectoId: Long
@@ -22,8 +22,8 @@ trait CicloComponent {
   // Definition of the CICLO table
   class CicloTable(tag: Tag) extends Table[CicloRow](tag, "CICLO") {
     def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
-    def fechaInicio = column[Timestamp]("FECHA_INCIO")
-    def fechaFin = column[Timestamp]("FECHA_FIN")
+    def fechaInicio = column[Option[Timestamp]]("FECHA_INCIO")
+    def fechaFin = column[Option[Timestamp]]("FECHA_FIN")
     def descripcion = column[String]("DESCRIPCION")
     def proyectoId = column[Long]("PROYECTO_ID")
     // Every table needs a * projection with the same type as the table's type parameter
@@ -31,7 +31,7 @@ trait CicloComponent {
       (
         id.?,
         fechaInicio,
-        fechaFin.?,
+        fechaFin,
         descripcion,
         proyectoId
       ) <> (CicloRow.tupled, CicloRow.unapply)

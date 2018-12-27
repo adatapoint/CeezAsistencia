@@ -11,7 +11,7 @@ import scala.concurrent.{ExecutionContext, Future}
 case class RangoEdadRow(
     id: Option[Long],
     descripcion: String,
-    edadInicio: Int,
+    edadInicio: Option[Int],
     edadFin: Option[Int]
 )
 
@@ -21,7 +21,7 @@ trait RangoEdadComponent {
       extends Table[RangoEdadRow](tag, "RANGO_EDAD") {
     def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
     def descripcion = column[String]("DESCRIPCION")
-    def edadInicio = column[Int]("EDAD_INICIO")
+    def edadInicio = column[Option[Int]]("EDAD_INICIO")
     def edadFin = column[Option[Int]]("EDAD_FIN")
     // Every table needs a * projection with the same type as the table's type parameter
     def * =
