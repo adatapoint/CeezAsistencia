@@ -1,6 +1,11 @@
 package model
 
+import javax.inject.Inject
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
+import slick.jdbc.JdbcProfile
 import slick.jdbc.SQLiteProfile.api._
+
+import scala.concurrent.{ExecutionContext, Future}
 
 case class AsistenciaRow(
     usuarioId: Long,
@@ -23,4 +28,21 @@ trait AsistenciaComponent {
     def sesion = foreignKey("SESION_FK", sesionId, sesiones)(_.id)
   }
   lazy val asistencias = TableQuery[AsistenciaTable]
+}
+
+class AsistenciaDao @Inject()(
+    protected val dbConfigProvider: DatabaseConfigProvider)(
+    implicit ex: ExecutionContext)
+    extends HasDatabaseConfigProvider[JdbcProfile]
+    with MegaTrait {
+
+  def getAsistenciaByUsuarioAndSesion(
+      usuarioId: Long,
+      sesionId: Long
+  ): Future[Boolean] = {
+    val q = asistencias
+      .filter(x => x.usuarioId === usuarioId && x.sesionId === sesionId)
+      .exists
+    db.run(q.result)
+  }
 }

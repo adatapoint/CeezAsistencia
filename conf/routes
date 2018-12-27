@@ -4,12 +4,12 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index
-GET     /suma                       controllers.HomeController.suma(num1: Int, num2: Int)
-GET     /createdb                   controllers.Application.index
-GET     /usuario/sesion/:sesionId     controllers.HomeController.getUsuariosBySesion(sesionId: Long)
+GET     /                                           controllers.HomeController.index
+GET     /suma                                       controllers.HomeController.suma(num1: Int, num2: Int)
+GET     /createdb                                   controllers.Application.index
+GET     /usuario/sesion/:sesionId                   controllers.HomeController.getUsuariosBySesion(sesionId: Long)
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/*file                               controllers.Assets.versioned(path="/public", file: Asset)
 
