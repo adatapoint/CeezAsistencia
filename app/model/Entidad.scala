@@ -10,14 +10,14 @@ import slick.jdbc.SQLiteProfile.api._
 import scala.concurrent.{ExecutionContext, Future}
 
 case class EntidadRow(
-    id: Long,
+    id: Option[Long],
     nombre: String,
-    sigla: String,
-    telefono: String,
-    correo: String,
-    web: String,
-    direccion: String,
-    usuarioId: Long
+    sigla: Option[String],
+    telefono: Option[String],
+    correo: Option[String],
+    web: Option[String],
+    direccion: Option[String],
+    usuarioId: Option[Long]
 )
 
 trait EntidadComponent {
@@ -26,16 +26,16 @@ trait EntidadComponent {
   class EntidadTable(tag: Tag) extends Table[EntidadRow](tag, "ENTIDAD") {
     def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
     def nombre = column[String]("NOMBRE")
-    def sigla = column[String]("SIGLA")
-    def telefono = column[String]("TELEFONO")
-    def correo = column[String]("CORREO")
-    def web = column[String]("WEB")
-    def direccion = column[String]("DIRECCION")
-    def usuarioId = column[Long]("USUARIO_ID")
+    def sigla = column[Option[String]]("SIGLA")
+    def telefono = column[Option[String]]("TELEFONO")
+    def correo = column[Option[String]]("CORREO")
+    def web = column[Option[String]]("WEB")
+    def direccion = column[Option[String]]("DIRECCION")
+    def usuarioId = column[Option[Long]]("USUARIO_ID")
     // Every table needs a * projection with the same type as the table's type parameter
     def * =
       (
-        id,
+        id.?,
         nombre,
         sigla,
         telefono,
@@ -50,7 +50,8 @@ trait EntidadComponent {
   lazy val entidades = TableQuery[EntidadTable]
 }
 
-class EntidadDao @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(
+class EntidadDao @Inject()(
+    protected val dbConfigProvider: DatabaseConfigProvider)(
     implicit ec: ExecutionContext)
     extends HasDatabaseConfigProvider[JdbcProfile]
     with MegaTrait {

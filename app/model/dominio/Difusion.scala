@@ -9,7 +9,7 @@ import slick.jdbc.SQLiteProfile.api._
 import scala.concurrent.{ExecutionContext, Future}
 
 case class DifusionRow(
-    id: Long,
+    id: Option[Long],
     descripcion: String
 )
 
@@ -21,7 +21,7 @@ trait DifusionComponent {
     // Every table needs a * projection with the same type as the table's type parameter
     def * =
       (
-        id,
+        id.?,
         descripcion
       ) <> (DifusionRow.tupled, DifusionRow.unapply)
   }

@@ -13,15 +13,15 @@ import scala.concurrent.{ExecutionContext, Future}
 case class UsuarioRow(
     id: Long,
     nombre1: String,
-    nombre2: String,
+    nombre2: Option[String],
     apellido1: String,
-    apellido2: String,
-    celular: String,
+    apellido2: Option[String],
+    celular: Option[String],
     correo: String,
     fechaRegistro: Timestamp,
     generoId: Long,
-    rangoEdadId: Long,
-    ocupacionId: Long,
+    rangoEdadId: Option[Long],
+    ocupacionId: Option[Long],
     barrioId: Long,
     municipioId: Long
 )
@@ -35,17 +35,17 @@ trait UsuarioComponent {
   // Definition of the USUARIO table
   protected class UsuarioTable(tag: Tag)
       extends Table[UsuarioRow](tag, "USUARIO") {
-    def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
+    def id = column[Long]("ID", O.PrimaryKey)
     def nombre1 = column[String]("NOMBRE1")
-    def nombre2 = column[String]("NOMBRE2")
+    def nombre2 = column[Option[String]]("NOMBRE2")
     def apellido1 = column[String]("APELLIDO1")
-    def apellido2 = column[String]("APELLIDO2")
-    def celular = column[String]("CELULAR")
+    def apellido2 = column[Option[String]]("APELLIDO2")
+    def celular = column[Option[String]]("CELULAR")
     def correo = column[String]("CORREO")
     def fechaRegistro = column[Timestamp]("FECHA_REGISTRO")
     def generoId = column[Long]("GENERO_ID")
-    def rangoEdadId = column[Long]("RANGO_EDAD_ID")
-    def ocupacionId = column[Long]("OCUPACION_ID")
+    def rangoEdadId = column[Option[Long]]("RANGO_EDAD_ID")
+    def ocupacionId = column[Option[Long]]("OCUPACION_ID")
     def barrioId = column[Long]("BARRIO_ID")
     def municipioId = column[Long]("MUNICIPIO_ID")
     // Every table needs a * projection with the same type as the table's type parameter

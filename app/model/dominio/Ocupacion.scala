@@ -9,7 +9,7 @@ import slick.jdbc.SQLiteProfile.api._
 import scala.concurrent.{ExecutionContext, Future}
 
 case class OcupacionRow(
-    id: Long,
+    id: Option[Long],
     nombre: String
 )
 
@@ -22,7 +22,7 @@ trait OcupacionComponent {
     // Every table needs a * projection with the same type as the table's type parameter
     def * =
       (
-        id,
+        id.?,
         nombre
       ) <> (OcupacionRow.tupled, OcupacionRow.unapply)
   }

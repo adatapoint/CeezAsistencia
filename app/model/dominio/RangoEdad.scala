@@ -9,10 +9,10 @@ import slick.jdbc.SQLiteProfile.api._
 import scala.concurrent.{ExecutionContext, Future}
 
 case class RangoEdadRow(
-    id: Long,
+    id: Option[Long],
     descripcion: String,
     edadInicio: Int,
-    edadFin: Int
+    edadFin: Option[Int]
 )
 
 trait RangoEdadComponent {
@@ -22,11 +22,11 @@ trait RangoEdadComponent {
     def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
     def descripcion = column[String]("DESCRIPCION")
     def edadInicio = column[Int]("EDAD_INICIO")
-    def edadFin = column[Int]("EDAD_FIN")
+    def edadFin = column[Option[Int]]("EDAD_FIN")
     // Every table needs a * projection with the same type as the table's type parameter
     def * =
       (
-        id,
+        id.?,
         descripcion,
         edadInicio,
         edadFin

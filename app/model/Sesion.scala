@@ -11,11 +11,11 @@ import slick.jdbc.SQLiteProfile.api._
 import scala.concurrent.{ExecutionContext, Future}
 
 case class SesionRow(
-    id: Long,
+    id: Option[Long],
     nombre: String,
     fecha: Timestamp,
     lugar: String,
-    observacion: String,
+    observacion: Option[String],
     cicloId: Long,
     tipoSesionId: Long
 )
@@ -28,13 +28,13 @@ trait SesionComponent {
     def nombre = column[String]("NOMBRE")
     def fecha = column[Timestamp]("FECHA")
     def lugar = column[String]("LUGAR")
-    def observacion = column[String]("OBSERVACION")
+    def observacion = column[Option[String]]("OBSERVACION")
     def cicloId = column[Long]("CICLO_ID")
     def tipoSesionId = column[Long]("TIPO_SESION_ID")
     // Every table needs a * projection with the same type as the table's type parameter
     def * =
       (
-        id,
+        id.?,
         nombre,
         fecha,
         lugar,

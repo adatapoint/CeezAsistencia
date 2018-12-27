@@ -11,9 +11,9 @@ import slick.jdbc.SQLiteProfile.api._
 import scala.concurrent.{ExecutionContext, Future}
 
 case class ProyectoRow(
-    id: Long,
+    id: Option[Long],
     fechaInicio: Timestamp,
-    fechaFin: Timestamp,
+    fechaFin: Option[Timestamp],
     descripcion: String,
     estadoProyectoId: Long
 )
@@ -24,13 +24,13 @@ trait ProyectoComponent {
   class ProyectoTable(tag: Tag) extends Table[ProyectoRow](tag, "PROYECTO") {
     def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
     def fechaInicio = column[Timestamp]("FECHA_INCIO")
-    def fechaFin = column[Timestamp]("FECHA_FIN")
+    def fechaFin = column[Option[Timestamp]]("FECHA_FIN")
     def descripcion = column[String]("DESCRIPCION")
     def estadoProyectoId = column[Long]("ESTADO_PROYECTO_ID")
     // Every table needs a * projection with the same type as the table's type parameter
     def * =
       (
-        id,
+        id.?,
         fechaInicio,
         fechaFin,
         descripcion,

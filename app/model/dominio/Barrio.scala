@@ -9,7 +9,7 @@ import slick.jdbc.SQLiteProfile.api._
 import scala.concurrent.{ExecutionContext, Future}
 
 case class BarrioRow(
-    id: Long,
+    id: Option[Long],
     nombre: String,
     municipioId: Long
 )
@@ -24,7 +24,7 @@ trait BarrioComponent {
     // Every table needs a * projection with the same type as the table's type parameter
     def * =
       (
-        id,
+        id.?, // id.? significa que puede ser nulo, dado que no requiere id en el constructor. Pero la base de datos se lo asigna.
         nombre,
         municipioId
       ) <> (BarrioRow.tupled, BarrioRow.unapply)
