@@ -20,6 +20,7 @@ trait MegaTrait extends BarrioComponent
   with EntidadComponent
   with ProyectoComponent
   with SesionComponent
+  with TipoSesionComponent
   with UsuarioComponent {
 }
 
@@ -40,6 +41,7 @@ object MegaTrait extends MegaTrait {
     entidades.schema,
     proyectos.schema,
     sesiones.schema,
+    tiposSesion.schema,
     usuarios.schema
   ).reduceLeft(_ ++ _) // Acumula varios esquemas en un solo objeto
 
