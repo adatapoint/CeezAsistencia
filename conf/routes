@@ -4,11 +4,20 @@
 # ~~~~
 
 # An example controller showing a sample home page
-POST    /usuario                                    controllers.HomeController.addUsuario
-GET     /                                           controllers.HomeController.index
-GET     /suma                                       controllers.HomeController.suma(num1: Int, num2: Int)
-GET     /createdb                                   controllers.Application.index
-GET     /usuario/sesion/:sesionId                   controllers.HomeController.getUsuariosBySesion(sesionId: Long)
+#GET     /suma                                       controllers.HomeController.suma(num1: Int, num2: Int)
+
+### DATABASE ###
+GET             /createdb                                   controllers.Application.index
+
+### ASISTENTES ###
+POST            /asistente                                  controllers.AsistentesController.addAsistente
+PATCH           /asistente                                  controllers.AsistentesController.updateAsistente
+
+
+### ASISTENCIA ###
+POST            /asistencia                                 controllers.AsistenciasController.addAsistencia
+
+#GET             /usuario/sesion/:sesionId                   controllers.AsistenciasController.getAsistentesBySesion(sesionId: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                               controllers.Assets.versioned(path="/public", file: Asset)

@@ -17,11 +17,11 @@ case class EntidadRow(
     correo: Option[String],
     web: Option[String],
     direccion: Option[String],
-    usuarioId: Option[Long]
+    asistenteId: Option[Long]
 )
 
 trait EntidadComponent {
-  self: UsuarioComponent =>
+  self: AsistenteComponent =>
   // Definition of the ENTIDAD table
   class EntidadTable(tag: Tag) extends Table[EntidadRow](tag, "ENTIDAD") {
     def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
@@ -31,7 +31,7 @@ trait EntidadComponent {
     def correo = column[Option[String]]("CORREO")
     def web = column[Option[String]]("WEB")
     def direccion = column[Option[String]]("DIRECCION")
-    def usuarioId = column[Option[Long]]("USUARIO_ID")
+    def asistenteId = column[Option[Long]]("ASISTENTE_ID")
     // Every table needs a * projection with the same type as the table's type parameter
     def * =
       (
@@ -42,10 +42,10 @@ trait EntidadComponent {
         correo,
         web,
         direccion,
-        usuarioId
+        asistenteId,
       ) <> (EntidadRow.tupled, EntidadRow.unapply)
     // Tiene FK dado que las entidades tienen un contacto.
-    def usuario = foreignKey("USUARIO_FK", usuarioId, usuarios)(_.id)
+    def asistente = foreignKey("ASISTENTE_FK", asistenteId, asistentes)(_.id)
   }
   lazy val entidades = TableQuery[EntidadTable]
 }

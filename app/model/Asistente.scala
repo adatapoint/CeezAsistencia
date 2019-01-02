@@ -11,7 +11,7 @@ import slick.jdbc.SQLiteProfile.api._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class UsuarioRow(
+case class AsistenteRow(
     id: Long,
     nombre1: String,
     nombre2: Option[String],
@@ -27,15 +27,15 @@ case class UsuarioRow(
     municipioId: Long
 )
 
-trait UsuarioComponent {
+trait AsistenteComponent {
   self: GeneroComponent
     with RangoEdadComponent
     with OcupacionComponent
     with BarrioComponent
     with MunicipioComponent =>
-  // Definition of the USUARIO table
-  protected class UsuarioTable(tag: Tag)
-      extends Table[UsuarioRow](tag, "USUARIO") {
+  // Definition of the Asistente table
+  protected class AsistenteTable(tag: Tag)
+      extends Table[AsistenteRow](tag, "ASISTENTE") {
     def id = column[Long]("ID", O.PrimaryKey) //Cedula de la persona
     def nombre1 = column[String]("NOMBRE1")
     def nombre2 = column[Option[String]]("NOMBRE2")
@@ -65,7 +65,7 @@ trait UsuarioComponent {
         ocupacionId,
         barrioId,
         municipioId
-      ) <> (UsuarioRow.tupled, UsuarioRow.unapply)
+      ) <> (AsistenteRow.tupled, AsistenteRow.unapply)
     // Tiene FK
     def genero = foreignKey("GENERO_FK", generoId, generos)(_.id)
     def rangoEdad = foreignKey("RANGO_EDAD_FK", rangoEdadId, rangosEdad)(r => Rep.Some(r.id))
@@ -76,33 +76,37 @@ trait UsuarioComponent {
     def correoIndex = index("CORREO_IDX", correo, unique = true) // Index para que el correo sea único.
 
   }
-  lazy val usuarios = TableQuery[UsuarioTable]
+  lazy val asistentes = TableQuery[AsistenteTable]
 }
 
-class UsuarioDao @Inject()(
+class AsistenteDao @Inject()(
     protected val dbConfigProvider: DatabaseConfigProvider)(
     implicit ec: ExecutionContext)
     extends HasDatabaseConfigProvider[JdbcProfile]
     with MegaTrait {
 
-  def getUsuarioById(id: Long): Future[Option[UsuarioRow]] = {
-    val q = usuarios.filter(_.id === id) // usuario => usuario.id === id
-//    val r: Future[Option[UsuarioRow]] = db.run(q.result.headOption) // Retorna un futuro algo (puede ser nulo, entonces ponemos Option) Y como queremos el primero, ponemos head, pero como posible que sea nul, ponemos headOption
+  def getAsistenteById(id: Long): Future[Option[AsistenteRow]] = {
+    val q = asistentes.filter(_.id === id) // asistente => asistente.id === id
+//    val r: Future[Option[AsistenteRow]] = db.run(q.result.headOption) // Retorna un futuro algo (puede ser nulo, entonces ponemos Option) Y como queremos el primero, ponemos head, pero como posible que sea nul, ponemos headOption
     db.run(q.result.headOption)
   }
 
-  def getUsuariosBySesion(sesionId: Long): Future[Seq[UsuarioRow]] = { // Aquí está implicada la tabla Usuarios, la tabla Asistencia y la tabla Sesión
+  def getAsistentesBySesion(sesionId: Long): Future[Seq[AsistenteRow]] = { // Aquí está implicada la tabla asistente, la tabla Asistencia y la tabla Sesión
     val q = for {
-      u <- usuarios
+      u <- asistentes
       a <- asistencias
-      if a.sesionId === sesionId && u.id === a.usuarioId
+      if a.sesionId === sesionId && u.id === a.asistenteId
     } yield u
     db.run(q.result)
   }
 
-  def add(usuario: UsuarioRow): Future[UsuarioRow] = {
-    val q = usuarios += usuario
-    db.run(q).map(_ => usuario) // Una vez ejecutada la consulta, el resultado se mapea, y cualquier cosa que me llegue, igual me envía el usuario.
+  def add(asistente: AsistenteRow): Future[AsistenteRow] = {
+    val q = asistentes += asistente
+    db.run(q).map(_ => asistente) // Una vez ejecutada la consulta, el resultado se mapea, y cualquier cosa que me llegue, igual me envía el asistente.
+  }
+
+  def update(asistente: AsistenteRow): Future[Boolean] = {
+    Future.successful(true)
   }
 
 }

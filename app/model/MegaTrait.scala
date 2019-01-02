@@ -26,7 +26,7 @@ trait MegaTrait
     with ProyectoComponent
     with SesionComponent
     with TipoSesionComponent
-    with UsuarioComponent {}
+    with AsistenteComponent {}
 
 object MegaTrait extends MegaTrait {
   lazy val megaArraySchema = Array(
@@ -45,7 +45,7 @@ object MegaTrait extends MegaTrait {
     proyectos.schema,
     sesiones.schema,
     tiposSesion.schema,
-    usuarios.schema
+    asistentes.schema
   ).reduceLeft(_ ++ _) // Acumula varios esquemas en un solo objeto
 
   def getCreateSchema = {
