@@ -1,7 +1,8 @@
 package model
 
-import java.sql.Timestamp
+import java.time.LocalDate
 
+import model.ImplicitMappingDB._
 import javax.inject.Inject
 import model.dominio._
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
@@ -18,7 +19,7 @@ case class UsuarioRow(
     apellido2: Option[String],
     celular: Option[String],
     correo: String,
-    fechaRegistro: Timestamp,
+    fechaRegistro: LocalDate,
     generoId: Long,
     rangoEdadId: Option[Long],
     ocupacionId: Option[Long],
@@ -42,7 +43,7 @@ trait UsuarioComponent {
     def apellido2 = column[Option[String]]("APELLIDO2")
     def celular = column[Option[String]]("CELULAR")
     def correo = column[String]("CORREO")
-    def fechaRegistro = column[Timestamp]("FECHA_REGISTRO")
+    def fechaRegistro = column[LocalDate]("FECHA_REGISTRO")
     def generoId = column[Long]("GENERO_ID")
     def rangoEdadId = column[Option[Long]]("RANGO_EDAD_ID")
     def ocupacionId = column[Option[Long]]("OCUPACION_ID")
@@ -67,9 +68,9 @@ trait UsuarioComponent {
       ) <> (UsuarioRow.tupled, UsuarioRow.unapply)
     // Tiene FK
     def genero = foreignKey("GENERO_FK", generoId, generos)(_.id)
-    def rangoEdad = foreignKey("RANGO_EDAD_FK", rangoEdadId, rangosEdad)(_.id)
-    def ocupacion = foreignKey("OCUPACION_FK", ocupacionId, ocupaciones)(_.id)
-    def barrio = foreignKey("BARRIO_FK", barrioId, barrios)(_.id)
+    def rangoEdad = foreignKey("RANGO_EDAD_FK", rangoEdadId, rangosEdad)(r => Rep.Some(r.id))
+    def ocupacion = foreignKey("OCUPACION_FK", ocupacionId, ocupaciones)(r => Rep.Some(r.id))
+    def barrio = foreignKey("BARRIO_FK", barrioId, barrios)(r => Rep.Some(r.id))
     def municipio = foreignKey("MUNICIPIO_FK", municipioId, municipios)(_.id)
 
     def correoIndex = index("CORREO_IDX", correo, unique = true) // Index para que el correo sea único.
@@ -99,6 +100,10 @@ class UsuarioDao @Inject()(
     db.run(q.result)
   }
 
+  def add(usuario: UsuarioRow): Future[UsuarioRow] = {
+    val q = usuarios += usuario
+    db.run(q).map(_ => usuario) // Una vez ejecutada la consulta, el resultado se mapea, y cualquier cosa que me llegue, igual me envía el usuario.
+  }
 
 }
 

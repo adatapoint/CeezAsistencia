@@ -1,11 +1,13 @@
 package controllers
 
+import java.sql.SQLException
 import java.util.Calendar
 
 import javax.inject._
 import model.{MegaTrait, UsuarioDao, UsuarioRow}
 import play.api._
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
+import play.api.libs.json.{JsValue, Json, OFormat, Reads}
 import play.api.mvc._
 import slick.jdbc.JdbcProfile
 
@@ -26,18 +28,36 @@ class HomeController @Inject()(cc: ControllerComponents, usuarioDao: UsuarioDao)
     * will be called when the application receives a `GET` request with
     * a path of `/`.
     */
-  def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.index())
+  def index(): Action[AnyContent] = Action {
+    implicit request: Request[AnyContent] =>
+      Ok(views.html.index())
   }
 
-  def suma(num1: Int, num2: Int): Action[AnyContent] = Action { implicit request =>
-    Ok(s"${num1 + num2 * 3}")
+  def suma(num1: Int, num2: Int): Action[AnyContent] = Action {
+    implicit request =>
+      Ok(s"${num1 + num2 * 3}")
   }
 
   import scala.concurrent.ExecutionContext.Implicits.global
   def getUsuariosBySesion(sesionId: Long): Action[AnyContent] = Action.async {
-    usuarioDao.getUsuariosBySesion(1)
+    usuarioDao
+      .getUsuariosBySesion(1)
       .map(u => Ok(u.toString()))
+  }
+
+  implicit val fmtUsuario= Json.format[UsuarioRow] // Json.writes Json.reads para escritura y lectura. Json.format hace las dos cosas.
+
+  def addUsuario: Action[JsValue] = Action.async(parse.tolerantJson) { implicit request => // En el paréntesis recibo los parámetros que llegan en la URL  // Con el parse.json valido que sea un json.
+    request.body
+      .validate[UsuarioRow]
+      .fold(error =>
+              Future.successful(BadRequest(s"Error: $error")), //Error - Invalid
+            usuario => { // Valid
+              usuarioDao.add(usuario).map(u => Ok(Json.toJson(u)))
+                .recover{
+                  case ex => InternalServerError(s"Error: $ex")
+                }
+            })
   }
 
 }
@@ -49,23 +69,13 @@ class Application @Inject()(
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile] {
 
-  def index: Action[AnyContent] = Action.async { implicit request => // Debe ser async, dado que está devovliendo un futuro.
+  def index: Action[AnyContent] = Action.async { implicit request => // Debe ser async, dado que está devolviendo un futuro.
     if (environment.mode == play.api.Mode.Dev) {
       db.run(MegaTrait.getCreateSchema)
         .map(_ => Ok("Creadas las tablas de las bases de datos!"))
     } else {
-//      Future(BadRequest) // Tengo que devolver un futuro
+      //      Future(BadRequest) // Tengo que devolver un futuro
       Future.successful(BadRequest)
     }
   }
-
-  def insert: Action[AnyContent] = Action.async { implicit request =>
-    if (environment.mode == play.api.Mode.Dev) {
-      val q = Seq (
-        UsuarioRow(1128439028, "Vincent", "David", "Restrepo", "Tangarife", 3137604407, "vincentrestrepo@gmail.com", Calendar.getInstance(), 1, 4, 21, 2, )
-      )
-      db.run(MegaTrait.insert)
-    }
-  }
-
 }
