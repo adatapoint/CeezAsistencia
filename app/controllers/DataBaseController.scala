@@ -14,20 +14,14 @@ import scala.concurrent.{ExecutionContext, Future}
   * application's home page.
   */
 @Singleton
-class DataBaseController @Inject()(cc: ControllerComponents, asistenteDao: AsistenteDao)
-    extends AbstractController(cc) {
-
-}
-
-@Singleton
-class Application @Inject()(
+class DataBaseController @Inject()(
     environment: Environment,
     protected val dbConfigProvider: DatabaseConfigProvider,
     cc: ControllerComponents)(implicit ec: ExecutionContext)
     extends AbstractController(cc)
     with HasDatabaseConfigProvider[JdbcProfile] {
 
-  def index: Action[AnyContent] = Action.async { implicit request => // Debe ser async, dado que está devolviendo un futuro.
+  def createDataBase: Action[AnyContent] = Action.async { implicit request => // Debe ser async, dado que está devolviendo un futuro.
     if (environment.mode == play.api.Mode.Dev) {
       db.run(MegaTrait.getCreateSchema)
         .map(_ => Ok("Creadas las tablas de las bases de datos!"))
@@ -36,4 +30,9 @@ class Application @Inject()(
       Future.successful(BadRequest)
     }
   }
+
+  def index() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.index())
+  }
+
 }
